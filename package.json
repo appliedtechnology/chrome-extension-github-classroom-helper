@@ -1,11 +1,11 @@
 {
-  "name": "chrome-extension-boilerplate-react",
+  "name": "chrome-extension-github-classroom-helper",
   "version": "5.0.4",
-  "description": "A chrome extension boilerplate built with React 18, Webpack 5, and Webpack Dev Server 4",
+  "description": "A chrome extension that contains a bunch of cool features to work with GitHub classroom to submit feedback etc.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lxieyang/chrome-extension-boilerplate-react.git"
+    "url": "https://github.com/appliedtechnology/chrome-extension-github-classroom-helper.git"
   },
   "scripts": {
     "build": "node utils/build.js",

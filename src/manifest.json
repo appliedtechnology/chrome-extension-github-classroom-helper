@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Extension with React & Webpack",
-  "description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
+  "name": "GitHub Classroom Helper",
+  "description": "A chrome extension that contains a bunch of cool features to work with GitHub classroom to submit feedback etc.",
   "options_page": "options.html",
   "background": { "service_worker": "background.bundle.js" },
   "action": {

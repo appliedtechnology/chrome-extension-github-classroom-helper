@@ -46,7 +46,7 @@ var options = {
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
-  chromeExtensionBoilerplate: {
+  chromeExtensionGitHubCRHelper: {
     notHotReload: ['background', 'contentScript', 'devtools'],
   },
   output: {
