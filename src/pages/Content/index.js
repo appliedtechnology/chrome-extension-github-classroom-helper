@@ -5,22 +5,40 @@ console.log('Must reload extension for modifications to take effect.');
 
 printLine("Using the 'printLine' function from the Print Module");
 
-const delay = (timeInMs, callback) => {
-  setTimeout(() => {
-    callback();
-  }, timeInMs);
+const delay = (timeInMs) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, timeInMs);
+  });
 };
 
 const approvePR = () => {
-  delay(500, () => {
-    document
-      .querySelector('#pull_requests_submit_review [value="approve"]')
-      .click();
-  });
+  document
+    .querySelector('#pull_requests_submit_review [value="approve"]')
+    .click();
+};
+
+const submitReviews = () => {
+  const buttons = document.querySelectorAll('#review-changes-modal button');
+  for (let i = 0; i < buttons.length; i++) {
+    if (buttons[i].textContent.toLowerCase().trim() === 'submit review') {
+      buttons[i].click();
+      break;
+    }
+  }
 };
 
 const openReviewForm = () => {
   document.querySelector('.js-review-changes').click();
+};
+
+const openReviewSubmit = async () => {
+  openReviewForm();
+  await delay(300);
+  approvePR();
+  await delay(300);
+  submitReviews();
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -30,6 +48,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break;
     case 'APPROVE_PRS':
       approvePR();
+      break;
+    case 'SUBMIT_REVIEWS':
+      submitReviews();
+      break;
+    case 'OPEN_REVIEW_SUBMIT':
+      openReviewSubmit();
       break;
     default:
       break;

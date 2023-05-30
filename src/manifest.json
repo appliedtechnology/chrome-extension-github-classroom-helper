@@ -3,7 +3,6 @@
   "name": "GitHub Classroom Helper",
   "description": "A chrome extension that contains a bunch of cool features to work with GitHub classroom to submit feedback etc.",
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon-34.png"
@@ -16,13 +15,16 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "matches": [
+        "http://*/*",
+        "https://github.com/*/pull/*/files",
+        "https://classroom.github.com/classrooms/*"
+      ],
       "js": ["contentScript.bundle.js"],
       "css": ["content.styles.css"]
     }
   ],
   "permissions": ["tabs"],
-  "devtools_page": "devtools.html",
   "web_accessible_resources": [
     {
       "resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
