@@ -24,12 +24,6 @@ const Popup = () => {
     if (!tabs.length) {
       return [];
     }
-    if (!repo) {
-      const repoName = getRepoNameFromUrl(tabs[0]);
-      repoInputRef.current.value = repoName;
-      setRepo('repoName');
-      return filteredTabs;
-    }
     setTabs(filteredTabs);
     return filteredTabs;
   }, [repo])
@@ -71,9 +65,6 @@ const Popup = () => {
   }
 
   useEffect(() => {
-    if (repo && !repoInputRef.current.value) {
-      repoInputRef.current.value = repo;
-    }
     saveRepoNameToStorage(repo);
     getTabs();
   }, [repo, getTabs])
