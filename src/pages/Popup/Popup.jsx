@@ -28,6 +28,11 @@ const Popup = () => {
     return filteredTabs;
   }, [repo])
 
+  useEffect(() => {
+    repoInputRef.current.value = repo;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const reloadTabs = async () => {
     const tabs = await getTabs();
     for (let i = 0; i < tabs.length; i++) {
@@ -118,7 +123,7 @@ const Popup = () => {
             {
               tabs?.map(tab => {
                 const repoName = getRepoNameFromUrl(tab, repo);
-                return <li onClick={() => {
+                return <li key={repoName} onClick={() => {
                   makeTabActive(tab);
                 }} className='px-2 py-1 border rounded-md break-words whitespace-pre-wrap hover:bg-purple-700 hover:text-white cursor-pointer duration-200'>{
                     repoName

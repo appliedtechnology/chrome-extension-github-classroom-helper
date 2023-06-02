@@ -2,12 +2,11 @@ const STORAGE_KEYS = {
   SEARCHED_REPO_NAME: 'gch-searched-repo',
 };
 export const getRepoNameFromUrl = (tab, repo = '') => {
-  const urlChunks = tab.url.split('/');
-  let repoName = urlChunks[urlChunks.indexOf('pull') - 1];
+  const urlChunks = tab.url.split('files');
+  let repoName = urlChunks[0];
   if (!repo) {
     return repoName;
   }
-  repoName = repoName.replaceAll(`${repo}-`, '');
   return repoName;
 };
 
