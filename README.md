@@ -6,19 +6,10 @@
 [![npm-download](https://img.shields.io/npm/dw/chrome-extension-github-classroom-helper)](https://www.npmjs.com/package/chrome-extension-github-classroom-helper)
 [![npm](https://img.shields.io/npm/dm/chrome-extension-github-classroom-helper)](https://www.npmjs.com/package/chrome-extension-github-classroom-helper)
 
-## Announcements
-
-- Recently updated from **[React](https://reactjs.org)** ~~17~~ to **18**!
-- **_This extension adopts [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)!_**
-  - For V2 users, please check out the [manifest-v2](https://github.com/appliedtechnology/chrome-extension-github-classroom-helper/tree/manifest-v2) branch, or use version [3.x](https://www.npmjs.com/package/chrome-extension-github-classroom-helper/v/3.3.0).
-  - Check out the [Manifest V3 Migration Guide](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/).
-- Recently added [devtools](https://developer.chrome.com/docs/extensions/mv3/devtools/) Support! Thanks [GeekaholicLin](https://github.com/appliedtechnology/chrome-extension-github-classroom-helper/issues/17)!
-- Recently updated from **[Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)** ~~3.x~~ to **4.x** and **[Webpack](https://webpack.js.org/)** ~~4~~ to **5**!
-- Recently added [TypeScript](https://www.typescriptlang.org/) Support!
-
 ## Features
 
-This is a basic Chrome Extensions that contains a couple of features to work with GitHub classroom. For example, submitting all feedback (pull request feedbacks) at once.
+- Recognizes all the pages which have the [Feedback Pull Request](https://docs.github.com/en/education/manage-coursework-with-github-classroom/teach-with-github-classroom/leave-feedback-with-pull-requests) opened
+- Allows to send feedback on all the pull requests (feedbacks) at once
 
 This extension is updated with:
 
@@ -34,34 +25,28 @@ This extension is updated with:
 
 Please open up an issue to nudge me to keep the npm packages up-to-date. FYI, it takes time to make different packages with different versions work together nicely.
 
-## Installing and Running
-
-### Procedures:
+### How to use:
 
 1. Check if your [Node.js](https://nodejs.org/) version is >= **18**.
 2. Clone this repository.
-3. Change the package's `name`, `description`, and `repository` fields in `package.json`.
-4. Change the name of your extension on `src/manifest.json`.
-5. Run `npm install` to install the dependencies.
-6. Run `npm start`
-7. Load your extension on Chrome following:
+3. Run `npm install` to install the dependencies.
+4. Run `npm run build`
+5. Load your extension on Chrome following:
    1. Access `chrome://extensions/`
    2. Check `Developer mode`
    3. Click on `Load unpacked extension`
    4. Select the `build` folder.
-8. Happy hacking.
+6. Happy reviewing.
 
-## Structure
+## Developing
+
+### Structure
 
 All your extension's code must be placed in the `src` folder.
 
 The extension is already prepared to have a popup, an options page, a background page, and a new tab page (which replaces the new tab page of your browser). But feel free to customize these.
 
-## TypeScript
-
-This extension now supports TypeScript! The `Options` Page is implemented using TypeScript. Please refer to `src/pages/Options/` for example usages.
-
-## Webpack auto-reload and HRM
+## Running in dev mode
 
 To make your workflow much more efficient this extension uses the [webpack server](https://webpack.github.io/docs/webpack-dev-server.html) to development (started with `npm start`) with auto reload feature that reloads the browser automatically every time that you save some file in your editor.
 
@@ -117,7 +102,7 @@ $ NODE_ENV=production npm run build
 
 Now, the content of `build` folder will be the extension ready to be submitted to the Chrome Web Store. Just take a look at the [official guide](https://developer.chrome.com/webstore/publish) to more infos about publishing.
 
-## Secrets
+## Secrets (just for info, we don't use any)
 
 If you are developing an extension that talks with some API you probably are using different keys for testing and production. Is a good practice you not commit your secret keys and expose to anyone that have access to the repository.
 
@@ -145,4 +130,4 @@ ApiCall({ key: secrets.key });
 
 ---
 
-Michael Xieyang Liu | [Website](https://lxieyang.github.io)
+Maintained by @AhsanAyaz | [Website](https://codewithahsan.dev)
