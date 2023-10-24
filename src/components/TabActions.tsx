@@ -1,20 +1,20 @@
 import React, { FC } from 'react';
+import { AppTab } from '../types/tab.type';
 
 type TabActionsProps = {
-  getTabs: () => Promise<chrome.tabs.Tab[]>;
+  tabs: AppTab[];
   sendActionToTabs: (action: string) => void;
 };
 
 export const TabActions: FC<TabActionsProps> = ({
-  getTabs,
+  tabs,
   sendActionToTabs,
 }) => {
   const reloadTabs = async () => {
-    const tabs = await getTabs();
-    for (let i = 0; i < tabs.length; i++) {
-      const tabId = tabs[i].id as number;
+    tabs.filter(tabItem => (tabItem.isSelected)).forEach(tabItem => {
+      const tabId = tabItem.id as number;
       chrome.tabs.reload(tabId);
-    }
+    })
   };
 
   const approvePRs = () => {

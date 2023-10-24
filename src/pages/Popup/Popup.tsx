@@ -4,22 +4,26 @@ import './Popup.css';
 import { TabActions } from '../../components/TabActions';
 import { TabsList } from '../../components/TabsList';
 import { RepoForm } from '../../components/RepoForm';
+import { AppTab } from '../../types/tab.type';
 
 const Popup = () => {
-  const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
+  const [tabs, setTabs] = useState<AppTab[]>([]);
   const [repo, setRepo] = useState(getRepoNameFromStorage());
 
   const getTabs = useCallback(async () => {
     const tabs = await chrome.tabs.query({
       url: ['https://github.com/*/pull/*/files'],
-    });
+    }) as AppTab[];
     console.log({ tabs });
-    const filteredTabs = tabs.filter((tab: chrome.tabs.Tab) => {
+    const filteredTabs = tabs.filter((tab: AppTab) => {
       if (!repo) {
         return true;
       }
       return tab.url!.toLowerCase().includes(repo.toLowerCase());
-    });
+    }).map(tabItem => ({
+      ...tabItem,
+      isSelected: true
+    }));
     if (!tabs.length) {
       return [];
     }
@@ -28,11 +32,47 @@ const Popup = () => {
   }, [repo]);
 
   const sendActionToTabs = (action: any) => {
-    for (let i = 0; i < tabs.length; i++) {
-      const tabId = tabs[i].id as number;
+    tabs.filter(tabItem => (tabItem.isSelected)).forEach(tabItem => {
+      const tabId = tabItem.id as number;
       chrome.tabs.sendMessage(tabId, { action });
-    }
+    })
   };
+
+  const selectAll = () => {
+    setTabs(
+      tabs.map(tabItem => ({
+        ...tabItem,
+        isSelected: true
+      }))
+    )
+  }
+
+  const selectNone = () => {
+    setTabs(
+      tabs.map(tabItem => ({
+        ...tabItem,
+        isSelected: false
+      }))
+    )
+  }
+
+  const onTabSelectionChange = (tab: AppTab, isSelected: boolean) => {
+    setTabs(
+      tabs.map((tabItem) => {
+        if (tabItem.id === tab.id) {
+          return {
+            ...tab,
+            isSelected
+          }
+        }
+        return tabItem;
+      })
+    )
+  }
+
+  const getSelectedTabsLength = () => {
+    return tabs.filter(tabItem => tabItem.isSelected).length
+  }
 
   useEffect(() => {
     saveRepoNameToStorage(repo);
@@ -52,11 +92,16 @@ const Popup = () => {
           }}
         />
         <section className="flex items-center justify-center gap-4 flex-col">
-          <TabActions sendActionToTabs={sendActionToTabs} getTabs={getTabs} />
+          <TabActions sendActionToTabs={sendActionToTabs} tabs={tabs} />
         </section>
         <section className="mt-4">
-          <h2 className="text-lg">Tabs: {tabs.length}</h2>
-          <TabsList repo={repo} tabs={tabs} />
+          <h2 className="text-lg">Tabs: {getSelectedTabsLength() === tabs.length ? tabs.length : `${getSelectedTabsLength()} / ${tabs.length}`}</h2>
+          <div className='flex items-center justify-end gap-2'>
+            <small onClick={selectAll} className='cursor-pointer text-purple-500 font-bold hover:text-purple-600'>Select All</small>
+            <small>|</small>
+            <small onClick={selectNone} className='cursor-pointer text-purple-500 font-bold hover:text-purple-600'>Select None</small>
+          </div>
+          <TabsList repo={repo} tabs={tabs} onTabSelectionChange={onTabSelectionChange} />
         </section>
       </main>
       <footer className="w-full bg-slate-900 p-3">

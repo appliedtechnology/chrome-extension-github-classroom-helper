@@ -1,7 +1,9 @@
+import { AppTab } from "./types/tab.type";
+
 const STORAGE_KEYS = {
   SEARCHED_REPO_NAME: 'gch-searched-repo',
 };
-export const getRepoNameFromUrl = (tab: chrome.tabs.Tab, repo = '') => {
+export const getRepoNameFromUrl = (tab: AppTab, repo = '') => {
   const urlChunks = tab.url!.split('files');
   let repoName = urlChunks[0];
   if (!repo) {
