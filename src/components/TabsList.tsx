@@ -8,7 +8,7 @@ type TabsListProps = {
   onTabSelectionChange: (tab: AppTab, checked: boolean) => void
 };
 
-export const TabsList: FC<TabsListProps> = ({ tabs, repo, onTabSelectionChange }) => {
+export const TabsList: FC<TabsListProps> = ({ tabs, onTabSelectionChange }) => {
   /**
    * Commenting for later usage
    */
@@ -22,7 +22,7 @@ export const TabsList: FC<TabsListProps> = ({ tabs, repo, onTabSelectionChange }
   return (
     <ul className="flex flex-col gap-4 pt-4">
       {tabs?.map((tab: AppTab) => {
-        const repoName = getRepoNameFromUrl(tab, repo);
+        const repoName = getRepoNameFromUrl(tab);
         return (
           <li
             key={tab.id}

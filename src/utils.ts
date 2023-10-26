@@ -1,14 +1,11 @@
-import { AppTab } from "./types/tab.type";
+import { AppTab } from './types/tab.type';
 
 const STORAGE_KEYS = {
   SEARCHED_REPO_NAME: 'gch-searched-repo',
 };
-export const getRepoNameFromUrl = (tab: AppTab, repo = '') => {
+export const getRepoNameFromUrl = (tab: AppTab) => {
   const urlChunks = tab.url!.split('files');
-  let repoName = urlChunks[0];
-  if (!repo) {
-    return repoName;
-  }
+  const repoName = urlChunks[0];
   return repoName;
 };
 
