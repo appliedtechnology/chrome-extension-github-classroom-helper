@@ -9,6 +9,7 @@ import { AppTab } from '../../types/tab.type';
 const Popup = () => {
   const [tabs, setTabs] = useState<AppTab[]>([]);
   const [repo, setRepo] = useState(getRepoNameFromStorage());
+  const [uniqueUrls, setUniqueUrls] = useState<Set<string>>();
 
   const getTabs = useCallback(async () => {
     const tabs = await chrome.tabs.query({
@@ -19,6 +20,10 @@ const Popup = () => {
       if (!repo) {
         return true;
       }
+      if(uniqueUrls!.has(tab.url!)){
+        return false;
+      }
+      setUniqueUrls(new Set<string>(uniqueUrls!.add(tab.url!)));
       return tab.url!.toLowerCase().includes(repo.toLowerCase());
     }).map(tabItem => ({
       ...tabItem,
@@ -29,7 +34,7 @@ const Popup = () => {
     }
     setTabs(filteredTabs);
     return filteredTabs;
-  }, [repo]);
+  }, [repo, uniqueUrls]);
 
   const sendActionToTabs = (action: any) => {
     tabs.filter(tabItem => (tabItem.isSelected)).forEach(tabItem => {
