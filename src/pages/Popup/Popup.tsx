@@ -15,7 +15,13 @@ const Popup = () => {
       url: ['https://github.com/*/pull/*/files'],
     }) as AppTab[];
     console.log({ tabs });
-    const filteredTabs = tabs.filter((tab: AppTab) => {
+    const uniqueUrls = new Set<string>();
+    const filteredTabs = tabs
+    .filter((tab: AppTab) => {
+      if(uniqueUrls && uniqueUrls.has(tab.url!)){
+        return false;
+      }
+      uniqueUrls.add(tab.url!);
       if (!repo) {
         return true;
       }
