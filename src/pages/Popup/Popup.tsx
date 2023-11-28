@@ -9,19 +9,19 @@ import { AppTab } from '../../types/tab.type';
 const Popup = () => {
   const [tabs, setTabs] = useState<AppTab[]>([]);
   const [repo, setRepo] = useState(getRepoNameFromStorage());
-  const [uniqueUrls, setUniqueUrls] = useState<Set<string>>(new Set());
 
   const getTabs = useCallback(async () => {
     const tabs = await chrome.tabs.query({
       url: ['https://github.com/*/pull/*/files'],
     }) as AppTab[];
     console.log({ tabs });
+    const uniqueUrls = new Set<string>();
     const filteredTabs = tabs
     .filter((tab: AppTab) => {
       if(uniqueUrls && uniqueUrls.has(tab.url!)){
         return false;
       }
-      setUniqueUrls(uniqueUrls.add(tab.url!));
+      uniqueUrls.add(tab.url!);
       if (!repo) {
         return true;
       }
@@ -35,7 +35,7 @@ const Popup = () => {
     }
     setTabs(filteredTabs);
     return filteredTabs;
-  }, [repo, uniqueUrls]);
+  }, [repo]);
 
   const sendActionToTabs = (action: any) => {
     tabs.filter(tabItem => (tabItem.isSelected)).forEach(tabItem => {
