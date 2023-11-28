@@ -9,27 +9,22 @@ import { AppTab } from '../../types/tab.type';
 const Popup = () => {
   const [tabs, setTabs] = useState<AppTab[]>([]);
   const [repo, setRepo] = useState(getRepoNameFromStorage());
-  const [uniqueUrls, setUniqueUrls] = useState<Set<string>>(new Set(""));
+  const [uniqueUrls, setUniqueUrls] = useState<Set<string>>(new Set());
 
   const getTabs = useCallback(async () => {
     const tabs = await chrome.tabs.query({
       url: ['https://github.com/*/pull/*/files'],
     }) as AppTab[];
     console.log({ tabs });
-    const filteredTabs = tabs.filter((tab: AppTab) => {
-      console.log(uniqueUrls);
-      if(uniqueUrls!.has(tab.url!)){
+    const filteredTabs = tabs
+    .filter((tab: AppTab) => {
+      if(uniqueUrls && uniqueUrls.has(tab.url!)){
         return false;
       }
       setUniqueUrls(uniqueUrls.add(tab.url!));
-      return true;
-    })
-    .filter((tab: AppTab) => {
       if (!repo) {
         return true;
       }
-      setUniqueUrls(new Set<string>(uniqueUrls!.add(tab.url!)));
-      console.log(`unique urls are: ${uniqueUrls}`)
       return tab.url!.toLowerCase().includes(repo.toLowerCase());
     }).map(tabItem => ({
       ...tabItem,
