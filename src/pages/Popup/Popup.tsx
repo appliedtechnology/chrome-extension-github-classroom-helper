@@ -8,31 +8,43 @@ import { AppTab } from '../../types/tab.type';
 
 const Popup = () => {
   const [tabs, setTabs] = useState<AppTab[]>([]);
+  const [uniqueTabs, setUniqueTabs] = useState<string[]>([]);
   const [repo, setRepo] = useState(getRepoNameFromStorage());
 
   const getTabs = useCallback(async () => {
     const tabs = await chrome.tabs.query({
       url: ['https://github.com/*/pull/*/files'],
     }) as AppTab[];
-    console.log({ tabs });
     const uniqueUrls = new Set<string>();
     const filteredTabs = tabs
-    .filter((tab: AppTab) => {
-      if(uniqueUrls && uniqueUrls.has(tab.url!)){
-        return false;
-      }
-      uniqueUrls.add(tab.url!);
-      if (!repo) {
-        return true;
-      }
-      return tab.url!.toLowerCase().includes(repo.toLowerCase());
-    }).map(tabItem => ({
-      ...tabItem,
-      isSelected: true
-    }));
+      .filter((tab: AppTab) => {
+        if (uniqueUrls && uniqueUrls.has(tab.url!)) {
+          return false;
+        }
+        uniqueUrls.add(tab.url!);
+        if (!repo) {
+          return true;
+        }
+        return tab.url!.toLowerCase().includes(repo.toLowerCase());
+      }).map(tabItem => ({
+        ...tabItem,
+        isSelected: true
+      }));
     if (!tabs.length) {
       return [];
     }
+
+    const prefixRegex = /https:\/\/github\.com\/saltsthlm\//;
+    const suffixRegex = /-[\w\d]*\/pull\/\d\/?\w*\/?$/;
+
+    const uniqueTabs = tabs.reduce((accumulator: string[], tab) => {
+      const replacedUrl = tab.url?.replace(prefixRegex, '').replace(suffixRegex, '')!;
+      if (!accumulator.includes(replacedUrl)) {
+        accumulator.push(replacedUrl);
+      }
+      return accumulator;
+    }, []);
+    setUniqueTabs(uniqueTabs);
     setTabs(filteredTabs);
     return filteredTabs;
   }, [repo]);
@@ -92,6 +104,7 @@ const Popup = () => {
       </header>
       <main className="py-4 px-4 max-h-80 overflow-auto">
         <RepoForm
+          uniqueTabs={uniqueTabs}
           repo={repo}
           onValueUpdate={(val: string) => {
             setRepo(val);

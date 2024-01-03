@@ -3,25 +3,33 @@ import React, { FC, useEffect, useRef } from 'react';
 type RepoFormProps = {
   onValueUpdate: (val: string) => void;
   repo: string;
+  uniqueTabs: string[];
 };
 
-export const RepoForm: FC<RepoFormProps> = ({ onValueUpdate, repo }) => {
-  const repoInputRef = useRef<HTMLInputElement>(null);
+export const RepoForm: FC<RepoFormProps> = ({ onValueUpdate, repo, uniqueTabs }) => {
+  const repoSelectRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
-    repoInputRef.current!.value = repo;
+    if (repoSelectRef.current) {
+      repoSelectRef.current.value = repo;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [repo]);
+
   return (
-    <input
+    <select
       onChange={(e) => {
         const val = e.target.value;
         onValueUpdate(val);
       }}
-      ref={repoInputRef}
-      type="text"
+      ref={repoSelectRef}
       className="px-3 p-2 mb-4 w-full ring ring-slate-900 rounded-md"
-      placeholder="Enter repo name"
-    />
+    >
+      {uniqueTabs.map((repoOption: any) => (
+        <option key={repoOption} value={repoOption}>
+          {repoOption}
+        </option>
+      ))}
+    </select>
   );
 };
